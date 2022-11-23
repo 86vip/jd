@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration
+        PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+        "https://mybatis.org/dtd/mybatis-3-config.dtd">
+<!--根元素：核心配置-->
+<configuration>
+    <!--加载外部的properties文件-->
+    <properties resource="db.properties"/>
+    <!--设置别名-->
+    <typeAliases>
+        <!--给包下的所有类都设置别名，别名都为对应类名-->
+        <package name="com.xxxx.jd.vo"/>
+    </typeAliases>
+    <!--
+        environments：环境的配置与选择
+        default：当前选择使用哪一个环境，定义要使用环境的id属性值
+    -->
+    <environments default="development">
+        <!--环境的配置： id：环境的唯一标识-->
+        <environment id="development">
+            <!--事务管理机制：默认JDBC事务管理机制-->
+            <transactionManager type="JDBC"/>
+            <!--
+                数据源配置|连接池配置：
+                    type="POOLED" 选择连接池技术管理连接
+            -->
+            <dataSource type="POOLED">
+                <!--数据库参数配置-->
+                <property name="driver" value="${driver}"/>
+                <property name="url" value="${url}"/>
+                <property name="username" value="${username}"/>
+                <property name="password" value="${password}"/>
+            </dataSource>
+        </environment>
+    </environments>
+    <!--SQL映射文件扫描-->
+    <mappers>
+        <package name="com.xxxx.jd.dao"/>
+    </mappers>
+</configuration>
