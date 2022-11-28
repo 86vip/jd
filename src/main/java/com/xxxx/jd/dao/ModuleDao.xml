@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxxx.jd.dao.ModuleDao">
+  <resultMap id="BaseResultMap" type="com.xxxx.jd.vo.Module">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="module_name" jdbcType="VARCHAR" property="moduleName" />
+    <result column="parent_id" jdbcType="INTEGER" property="parentId" />
+    <result column="grade" jdbcType="INTEGER" property="grade" />
+    <result column="opt_value" jdbcType="VARCHAR" property="optValue" />
+    <result column="is_valid" jdbcType="TINYINT" property="isValid" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, module_name, parent_id, grade, opt_value, is_valid, create_date, update_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_module
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询所有的资源列表（部分treeNode需要的字段） -->
+  <select id="queryAllModules" resultType="com.xxxx.jd.model.TreeModel">
+    select id, parent_id pId, module_name name
+    from t_module
+    where is_valid = 1
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_module
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xxxx.jd.vo.Module" useGeneratedKeys="true">
+    insert into t_module (module_name, parent_id, grade, 
+      opt_value, is_valid, create_date, 
+      update_date)
+    values (#{moduleName,jdbcType=VARCHAR}, #{parentId,jdbcType=INTEGER}, #{grade,jdbcType=INTEGER}, 
+      #{optValue,jdbcType=VARCHAR}, #{isValid,jdbcType=TINYINT}, #{createDate,jdbcType=TIMESTAMP}, 
+      #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xxxx.jd.vo.Module" useGeneratedKeys="true">
+    insert into t_module
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="moduleName != null">
+        module_name,
+      </if>
+      <if test="parentId != null">
+        parent_id,
+      </if>
+      <if test="grade != null">
+        grade,
+      </if>
+      <if test="optValue != null">
+        opt_value,
+      </if>
+      <if test="isValid != null">
+        is_valid,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="moduleName != null">
+        #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="optValue != null">
+        #{optValue,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        #{isValid,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxxx.jd.vo.Module">
+    update t_module
+    <set>
+      <if test="moduleName != null">
+        module_name = #{moduleName,jdbcType=VARCHAR},
+      </if>
+      <if test="parentId != null">
+        parent_id = #{parentId,jdbcType=INTEGER},
+      </if>
+      <if test="grade != null">
+        grade = #{grade,jdbcType=INTEGER},
+      </if>
+      <if test="optValue != null">
+        opt_value = #{optValue,jdbcType=VARCHAR},
+      </if>
+      <if test="isValid != null">
+        is_valid = #{isValid,jdbcType=TINYINT},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxxx.jd.vo.Module">
+    update t_module
+    set module_name = #{moduleName,jdbcType=VARCHAR},
+      parent_id = #{parentId,jdbcType=INTEGER},
+      grade = #{grade,jdbcType=INTEGER},
+      opt_value = #{optValue,jdbcType=VARCHAR},
+      is_valid = #{isValid,jdbcType=TINYINT},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

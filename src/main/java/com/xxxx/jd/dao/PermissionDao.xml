@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxxx.jd.dao.PermissionDao">
+  <resultMap id="BaseResultMap" type="com.xxxx.jd.vo.Permission">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="module_id" jdbcType="INTEGER" property="moduleId" />
+    <result column="acl_value" jdbcType="VARCHAR" property="aclValue" />
+    <result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+    <result column="update_date" jdbcType="TIMESTAMP" property="updateDate" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, role_id, module_id, acl_value, create_date, update_date
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from t_permission
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <!-- 查询角色拥有的所有资源id的集合 -->
+  <select id="queryRoleHasModuleIdsByRoleId" resultType="java.lang.Integer">
+    select module_id
+    from t_permission
+    where role_id = #{roleId}
+  </select>
+  <select id="countPermissionByRoleId" resultType="java.lang.Integer">
+    select count(1)
+    from t_permission
+    where role_id = #{roleId}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from t_permission
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deletePermissionByRoleId">
+    delete
+    from t_permission
+    where role_id = #{roleId}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xxxx.jd.vo.Permission" useGeneratedKeys="true">
+    insert into t_permission (role_id, module_id, acl_value, 
+      create_date, update_date)
+    values (#{roleId,jdbcType=INTEGER}, #{moduleId,jdbcType=INTEGER}, #{aclValue,jdbcType=VARCHAR}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xxxx.jd.vo.Permission" useGeneratedKeys="true">
+    insert into t_permission
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="moduleId != null">
+        module_id,
+      </if>
+      <if test="aclValue != null">
+        acl_value,
+      </if>
+      <if test="createDate != null">
+        create_date,
+      </if>
+      <if test="updateDate != null">
+        update_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="moduleId != null">
+        #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="aclValue != null">
+        #{aclValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <insert id="insertBatch">
+    insert into t_permission(role_id, module_id, acl_value, create_date, update_date)
+    VALUES
+    <foreach collection="list" separator="," item="item">
+      (#{item.roleId},#{item.moduleId},#{item.aclValue},#{item.createDate},#{item.updateDate})
+    </foreach>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xxxx.jd.vo.Permission">
+    update t_permission
+    <set>
+      <if test="roleId != null">
+        role_id = #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="moduleId != null">
+        module_id = #{moduleId,jdbcType=INTEGER},
+      </if>
+      <if test="aclValue != null">
+        acl_value = #{aclValue,jdbcType=VARCHAR},
+      </if>
+      <if test="createDate != null">
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null">
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xxxx.jd.vo.Permission">
+    update t_permission
+    set role_id = #{roleId,jdbcType=INTEGER},
+      module_id = #{moduleId,jdbcType=INTEGER},
+      acl_value = #{aclValue,jdbcType=VARCHAR},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>
