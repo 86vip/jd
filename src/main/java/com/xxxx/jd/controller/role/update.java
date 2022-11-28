@@ -1,0 +1,36 @@
+package com.xxxx.jd.controller.role;
+
+import com.alibaba.fastjson.JSON;
+import com.xxxx.jd.base.Result;
+import com.xxxx.jd.base.ResultInfo;
+import com.xxxx.jd.service.RoleService;
+import com.xxxx.jd.vo.Role;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+
+@WebServlet("/role/update")
+public class update extends HttpServlet {
+    private RoleService roleService = new RoleService();
+    @Override
+    protected void service(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        resp.setContentType("application/json; charset=utf-8");
+        Role role = new Role();
+        role.setId(Integer.valueOf(req.getParameter("id")));
+        role.setRoleName(req.getParameter("roleName"));
+        role.setRoleRemark(req.getParameter("roleRemark"));
+        Object r = roleService.updateRole(role);
+        ResultInfo resultInfo;
+        if (r instanceof String) {
+            resultInfo = Result.fail((String) r);
+        }else{
+            resultInfo = Result.success();
+        }
+        resp.getWriter().write(JSON.toJSONString(resultInfo));
+
+    }
+}

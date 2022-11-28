@@ -34,8 +34,8 @@ layui.use(['table','layer'],function() {
             , {field: 'id', title: '编号', sort: true, fixed: 'left'}
             , {field: 'roleName', title: '角色名称', align: 'center'}
             , {field: 'roleRemark', title: '角色备注', align: 'center'}
-            , {field: 'createDate', title: '创建时间', align: 'center'}
-            , {field: 'updateDate', title: '修改时间', align: 'center'}
+            , {field: 'createDate', title: '创建时间', align: 'center',templet: "<div>{{layui.util.toDateString(d.createDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+            , {field: 'updateDate', title: '修改时间', align: 'center',templet: "<div>{{layui.util.toDateString(d.createDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
             , {title: '操作', templet: '#roleListBar', fixed: 'right', align: 'center', minWidth: 150}
         ]]
     });

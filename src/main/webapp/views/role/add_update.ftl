@@ -19,7 +19,7 @@
         <label class="layui-form-label">角色备注</label>
         <div class="layui-input-block">
             <input type="text" class="layui-input userName"
-                   lay-verify="required" name="roleRemark" id="roleRemark" value="${(role.roleRemark)!}" placeholder="请输入角色备注">
+                   name="roleRemark" id="roleRemark" value="${(role.roleRemark)!}" placeholder="请输入角色备注">
         </div>
     </div>
 

@@ -88,10 +88,10 @@ public class UserService {
     public Object updateUser(User user) {
         SqlSession sqlSession = SessionUtils.getSession();
         UserDao userDao = sqlSession.getMapper(UserDao.class);
+        //参数校验
         if (user.getId() == null || userDao.selectByPrimaryKey(user.getId()) == null) {
             return "待更新记录不存在！";
         }
-        //参数校验
         String check = checkUserParams(user.getUserName(), user.getEmail(), user.getPhone(), user.getId());
         if (check != null) {
             return check;
