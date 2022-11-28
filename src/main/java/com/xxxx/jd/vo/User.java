@@ -3,7 +3,7 @@ package com.xxxx.jd.vo;
 import java.io.Serializable;
 import java.util.Date;
 import lombok.Data;
-
+import com.fasterxml.jackson.annotation.JsonFormat;
 /**
  * t_user
  * @author 
@@ -27,8 +27,12 @@ public class User implements Serializable {
 
     private Integer isValid;
 
+    private String roleIds;
+
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date createDate;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private Date updateDate;
 
     private static final long serialVersionUID = 1L;
