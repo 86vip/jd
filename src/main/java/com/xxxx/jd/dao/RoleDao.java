@@ -5,6 +5,7 @@ import com.xxxx.jd.vo.Role;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Map;
 
 public interface RoleDao {
     int deleteByPrimaryKey(Integer id);
@@ -22,4 +23,6 @@ public interface RoleDao {
     List<Role> selectByParams(RoleQuery roleQuery);
 
     Role selectByRoleName(String roleName);
+
+    List<Map<String, Object>> queryAllRoles(Integer userId);
 }

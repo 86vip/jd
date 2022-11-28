@@ -3,6 +3,7 @@ package com.xxxx.jd.service;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xxxx.jd.dao.UserDao;
+import com.xxxx.jd.dao.UserRoleDao;
 import com.xxxx.jd.model.UserModel;
 import com.xxxx.jd.query.UserQuery;
 import com.xxxx.jd.utils.Md5Util;
@@ -10,6 +11,7 @@ import com.xxxx.jd.utils.PhoneUtil;
 import com.xxxx.jd.utils.SessionUtils;
 import com.xxxx.jd.utils.UserIDBase64;
 import com.xxxx.jd.vo.User;
+import com.xxxx.jd.vo.UserRole;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
@@ -45,7 +47,6 @@ public class UserService {
         if (user == null) {
             return "用户名不存在！";
         }
-//        AssertUtil.isTrue(user == null, "用户姓名不存在！");
 
         //4、判断密码是否正确，比较客户端传递的用户密码与数据库中查询的用户对象中的用户密码
         if (!checkUserPwd(userPwd, user.getUserPwd())) {
@@ -63,7 +64,6 @@ public class UserService {
      */
     private UserModel buildUserInfo(User user) {
         UserModel userModel = new UserModel();
-        //userModel.setUserId(user.getUserId());
         //设置加密的用户id
         userModel.setUserIdStr(UserIDBase64.encoderUserID(user.getId()));
         userModel.setUserName(user.getUserName());
@@ -79,10 +79,7 @@ public class UserService {
         //将客户端传递的密码加密
         userPwd = Md5Util.encode(userPwd);
         //比对加密后的密码  ??? !=就报错 ???
-        if (!Objects.equals(userPwd, pwd)) {
-            return false;
-        }
-        return true;
+        return Objects.equals(userPwd, pwd);
     }
 
     public Object updateUser(User user) {
@@ -106,8 +103,8 @@ public class UserService {
         sqlSession.commit();
         sqlSession.close();
         /* 用户角色关联 */
-//        relationUserRole(user.getId(), user.getRoleIds());
-        return null;
+        check = relationUserRole(user.getId(), user.getRoleIds());
+        return check;
     }
 
     /**
@@ -246,14 +243,14 @@ public class UserService {
         sqlSession.commit();
         sqlSession.close();
         /* 用户角色关联 */
-        /* 问题来了，Q: 添加操作怎么获取到userID(主键)呢？A: 修改 UserMapper.xml 文件，设置获取插入的主键并返回赋值给User对象 */
-//        relationUserRole(user.getId(), user.getRoleIds());
-        return null;
+        check = relationUserRole(user.getId(), user.getRoleIds());
+        return check;
     }
 
     public Object deleteByIds(String[] ids) {
         SqlSession sqlSession = SessionUtils.getSession();
         UserDao userDao = sqlSession.getMapper(UserDao.class);
+        UserRoleDao userRoleDao = sqlSession.getMapper(UserRoleDao.class);
         if (ids == null || ids.length == 0) {
             return "待删除记录不存在！";
         }
@@ -262,18 +259,68 @@ public class UserService {
             return "用户删除失败！";
         }
 
-/*        //遍历用户id数组
+        //遍历用户id数组
         for (String userId : ids) {
             //通过用户id查询对应的用户角色记录数量
-            Integer count = userRoleMapper.countUserRoleByUserId(userId);
+            Integer count = userRoleDao.countUserRoleByUserId(Integer.parseInt(userId));
             //判断是否有用户角色记录
             if (count > 0) {
                 //如果用户角色记录存在，则删除用户对应的角色记录
-                AssertUtil.isTrue(userRoleMapper.deleteUserRoleByUserId(userId) != count, "用户删除失败！");
+                if (userRoleDao.deleteUserRoleByUserId(Integer.parseInt(userId)) != count) {
+                    return "用户删除失败！";
+                }
             }
-        }*/
+        }
         sqlSession.commit();
         sqlSession.close();
         return null;
     }
+
+    /**
+     * 用户角色关联
+     *  添加、更新用户操作：
+     *      判断用户对应的角色记录是否存在，先将原来用户所有的角色都删除，然后在根据roleids重新加入
+     *  删除用户操作：
+     *      删除指定用户在t_user_role表中的相关记录
+     * @param userId    用户id
+     * @param roleIds   角色id
+     */
+    private String relationUserRole(Integer userId, String roleIds) {
+        SqlSession sqlSession = SessionUtils.getSession();
+        UserRoleDao userRoleDao = sqlSession.getMapper(UserRoleDao.class);
+        //通过用户id查询用户角色记录数
+        Integer count = userRoleDao.countUserRoleByUserId(userId);
+
+        //判断是否有用户角色记录
+        if (count > 0&&userRoleDao.deleteUserRoleByUserId(userId) != count) {
+            //如果用户角色记录存在，则删除用户对应的角色记录
+                return "用户角色分配失败！";
+        }
+
+        //判断角色id是否存在，存在则给用户添加相对应的用户角色记录
+        if (StringUtils.isNotBlank(roleIds)) {
+            //将用户角色记录设置到集合中，待会批量添加
+            List<UserRole> userRoleList = new ArrayList<>();
+            //将角色id字符串转换成数组
+            String[] roleIdsArray = roleIds.split(",");
+            //遍历角色id数组，设置每个用户角色对象并放到数组中
+            for (String roleId : roleIdsArray) {
+                UserRole userRole = new UserRole();
+                userRole.setRoleId(Integer.parseInt(roleId));
+                userRole.setUserId(userId);
+                userRole.setCreateDate(new Date());
+                userRole.setUpdateDate(new Date());
+                //放到集合中
+                userRoleList.add(userRole);
+            }
+            //批量添加用户角色记录
+            if(userRoleDao.insertBatch(userRoleList) != userRoleList.size()){
+                return "用户角色分配失败！";
+            }
+        }
+        sqlSession.commit();
+        sqlSession.close();
+        return null;
+    }
+
 }

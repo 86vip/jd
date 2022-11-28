@@ -34,6 +34,7 @@ public class update extends HttpServlet {
         user.setPhone(req.getParameter("phone"));
         user.setUserName(req.getParameter("userName"));
         user.setTrueName(req.getParameter("trueName"));
+        user.setRoleIds(req.getParameter("roleIds"));
         Object result = userService.updateUser(user);
 
         ResultInfo resultInfo;

@@ -64,11 +64,11 @@ layui.use(['form', 'layer','formSelects'], function () {
      * formSelects.config(ID,Options,isJson)
      *
      */
-/*    let userId = $('[name="id"]').val();
+    let userId = $('[name="id"]').val();
     formSelects.config('selectId', {
         type: 'post',
         searchUrl: ctx + '/role/queryAllRoles?userId='+userId,
         keyName: 'roleName',
         keyVal: 'id'
-    }, true);*/
+    }, true);
 });

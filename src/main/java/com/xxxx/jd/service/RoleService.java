@@ -2,18 +2,17 @@ package com.xxxx.jd.service;
 
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
+import com.xxxx.jd.dao.ModuleDao;
+import com.xxxx.jd.dao.PermissionDao;
 import com.xxxx.jd.dao.RoleDao;
-import com.xxxx.jd.dao.UserDao;
 import com.xxxx.jd.query.RoleQuery;
 import com.xxxx.jd.utils.SessionUtils;
+import com.xxxx.jd.vo.Permission;
 import com.xxxx.jd.vo.Role;
-import com.xxxx.jd.vo.User;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class RoleService {
     public Map<String, Object> queryByParamsForTable(RoleQuery roleQuery) {
@@ -108,6 +107,55 @@ public class RoleService {
         if (roleDao.updateByPrimaryKeySelective(role) < 1) {
             return "删除角色记录失败！";
         }
+        return null;
+    }
+
+    public List<Map<String, Object>> queryAllRoles(String userId) {
+        SqlSession sqlSession = SessionUtils.getSession();
+        RoleDao roleDao = sqlSession.getMapper(RoleDao.class);
+        if ("".equals(userId)) {
+            userId = "0";
+        }
+        List<Map<String, Object>> list = roleDao.queryAllRoles(Integer.parseInt(userId));
+        sqlSession.close();
+        return list;
+    }
+
+    public Object addGrant(String roleId, String[] mIds) {
+        SqlSession sqlSession = SessionUtils.getSession();
+        PermissionDao permissionDao = sqlSession.getMapper(PermissionDao.class);
+        ModuleDao moduleDao = sqlSession.getMapper(ModuleDao.class);
+        //1、通过角色id查询对应的权限记录
+        Integer count = permissionDao.countPermissionByRoleId(roleId);
+        //2、如果权限记录存在，则删除全部权限
+        if (count > 0&&permissionDao.deletePermissionByRoleId(roleId) != count) {
+                return "角色授权失败！";
+        }
+        //3、如果有选择权限，则添加权限记录
+        if (mIds!=null&&mIds.length > 0) {
+            //定义permission集合
+            List<Permission> permissionList = new ArrayList<>();
+            //遍历资源id数组
+            for (String mId : mIds) {
+                if (mId == "") {
+                    mId = "0";
+                }
+                Permission permission = new Permission();
+                permission.setRoleId(Integer.valueOf(roleId));
+                permission.setModuleId(Integer.valueOf(mId));
+                permission.setAclValue(moduleDao.selectByPrimaryKey(Integer.parseInt(mId)).getOptValue());
+                permission.setCreateDate(new Date());
+                permission.setUpdateDate(new Date());
+
+                permissionList.add(permission);
+            }
+            //执行批量添加操作，判断受影响的行数
+            if (permissionDao.insertBatch(permissionList) != permissionList.size()) {
+                return "角色授权失败！";
+            }
+        }
+        sqlSession.commit();
+        sqlSession.close();
         return null;
     }
 }

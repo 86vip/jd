@@ -22,7 +22,7 @@ function loadModuleData() {
         //绑定回调函数
         callback:{
             //onCheck函数：当checkbox被选中或取消选中时触发的函数
-            onCheck:zTreeOnCheck
+            onCheck:zTreeOnCheck,
         }
     }
     //通过ajax查询资源列表

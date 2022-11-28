@@ -23,4 +23,5 @@ public interface UserDao {
     List<User> selectByParams(UserQuery userQuery);
 
     int deleteBatch(String[] ids);
+
 }
