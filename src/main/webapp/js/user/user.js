@@ -25,6 +25,22 @@ layui.use(['table','layer'],function(){
         , limits: [10, 20, 30, 40, 50]
         // 开启头部工具栏
         , toolbar: '#toolbarDemo'
+        // 解析分页数据
+        , parseData:function(res){
+            let result;
+            if (this.page.curr) {
+                result = res.data.slice(this.limit * (this.page.curr - 1), this.limit * this.page.curr);
+            } else {
+                result = res.data.slice(0, this.limit);
+            }
+
+            return {
+                "code": res.code, //解析接口状态
+                "msg": res.msg, //解析提示文本
+                "count": res.count, //解析数据长度
+                "data": result //解析数据列表
+            }
+        }
         // 表头
         , cols: [[
             // field：要求field属性值与返回的数据中对应的属性字段名一致

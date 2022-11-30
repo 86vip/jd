@@ -29,6 +29,12 @@
     from t_permission
     where role_id = #{roleId}
   </select>
+  <select id="queryUserHasPermissionByUserId" resultType="java.lang.String">
+    select distinct acl_value
+    from t_permission
+           left join t_user_role tur on t_permission.role_id = tur.role_id
+    where user_id = #{userId}
+  </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
     delete from t_permission
     where id = #{id,jdbcType=INTEGER}

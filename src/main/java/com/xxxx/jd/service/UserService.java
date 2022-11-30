@@ -6,13 +6,9 @@ import com.xxxx.jd.dao.UserDao;
 import com.xxxx.jd.dao.UserRoleDao;
 import com.xxxx.jd.model.UserModel;
 import com.xxxx.jd.query.UserQuery;
-import com.xxxx.jd.utils.Md5Util;
-import com.xxxx.jd.utils.PhoneUtil;
-import com.xxxx.jd.utils.SessionUtils;
-import com.xxxx.jd.utils.UserIDBase64;
+import com.xxxx.jd.utils.*;
 import com.xxxx.jd.vo.User;
 import com.xxxx.jd.vo.UserRole;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.*;

@@ -7,9 +7,9 @@ import com.xxxx.jd.dao.PermissionDao;
 import com.xxxx.jd.dao.RoleDao;
 import com.xxxx.jd.query.RoleQuery;
 import com.xxxx.jd.utils.SessionUtils;
+import com.xxxx.jd.utils.StringUtils;
 import com.xxxx.jd.vo.Permission;
 import com.xxxx.jd.vo.Role;
-import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.session.SqlSession;
 
 import java.util.*;

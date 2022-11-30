@@ -27,13 +27,13 @@ layui.use(['form','jquery','jquery_cookie'], function () {
                         //成功修改密码后，清空cookie数据
                         layer.msg("用户密码修改成功，系统将在3秒后自动退出...", function () {
                             //清空cookie
-                            $.removeCookie("userIdStr", {domain: "localhost", path: "/crm"});
-                            $.removeCookie("userName", {domain: "localhost", path: "/crm"});
-                            $.removeCookie("trueName", {domain: "localhost", path: "/crm"});
+                            $.removeCookie("userIdStr",{domain:"localhost",path:"/jd"});
+                            $.removeCookie("userName",{domain:"localhost",path:"/jd"});
+                            $.removeCookie("trueName", {domain: "localhost", path: "/jd"});
                             setTimeout(function () {
                                 //父窗口跳转到登录页面
                                 window.parent.location.href = ctx + '/index';
-                            }, 3000);
+                            }, 2000);
                         });
                     }else{
                         layer.msg(result.msg, {icon: 5});

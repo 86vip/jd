@@ -1,6 +1,5 @@
 package com.xxxx.jd.utils;
 
-import org.apache.commons.lang3.StringUtils;
 
 import java.util.Base64;
 

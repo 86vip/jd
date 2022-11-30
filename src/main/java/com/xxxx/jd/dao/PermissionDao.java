@@ -24,4 +24,6 @@ public interface PermissionDao {
     Integer deletePermissionByRoleId(String roleId);
 
     Integer insertBatch(List<Permission> permissionList);
+
+    List<String> queryUserHasPermissionByUserId(Integer userId);
 }
