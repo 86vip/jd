@@ -43,6 +43,5 @@ public class update extends HttpServlet {
             resultInfo = Result.success("更新产品成功！");
         }
         resp.getWriter().write(JSON.toJSONString(resultInfo));
-
     }
 }

@@ -24,19 +24,19 @@ layui.use(['form', 'layer','laydate'], function () {
     /**
      * 监听表单submit事件
      */
-    form.on('submit(addOrUpdateProduct)',(data)=>{
+    form.on('submit(addOrUpdate)',(data)=>{
         //提交数据时的加载层
         let index = layer.msg("数据提交中，请稍后...", {
             icon: 16,
             time: false,  //不关闭
             shade: 0.8   //遮罩的透明度
         });
-        let url = ctx + "/product/add";
+        let url = ctx + "/customer/add";
 
-        let productId = $('[name="id"]').val();
-        if (productId != null && productId != '') {
+        let customerId = $('[name="id"]').val();
+        if (customerId != null && customerId != '') {
             //更新操作
-            url = ctx + '/product/update';
+            url = ctx + '/customer/update';
         }
 
         //发送ajax请求

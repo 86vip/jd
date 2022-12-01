@@ -55,7 +55,7 @@ layui.use(['table', 'layer'], function () {
             , {field: 'merchant', title: '产品商家', align: 'center'}
             , {field: 'type', title: '产品类型', align: 'center'}
             , {field: 'createDate', title: '引进时间', align: 'center',templet: "<div>{{layui.util.toDateString(d.createDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
-            , {field: 'updateDate', title: '更新时间', align: 'center',templet: "<div>{{layui.util.toDateString(d.updateDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
+            , {field: 'updateDate', title: '修改时间', align: 'center',templet: "<div>{{layui.util.toDateString(d.updateDate, 'yyyy-MM-dd HH:mm:ss')}}</div>"}
             , {title: '操作', templet: '#productListBar', fixed: 'right', align: 'center', minWidth: 150}
         ]]
     });
@@ -100,7 +100,6 @@ layui.use(['table', 'layer'], function () {
      */
     table.on('tool(product)',(data)=>{
         if (data.event === 'edit') {
-            //打开添加、修改角色的对话框
             openAddOrUpdateProductDialog(data.data.id);
         }else if (data.event === 'del') {
             deleteProduct(data.data.id);

@@ -137,7 +137,7 @@ public class UserService {
         if (!PhoneUtil.isMobile(phone)) {
             return "手机号格式不正确！";
         }
-
+        sqlSession.close();
         return null;
     }
 
@@ -274,12 +274,13 @@ public class UserService {
 
     /**
      * 用户角色关联
-     *  添加、更新用户操作：
-     *      判断用户对应的角色记录是否存在，先将原来用户所有的角色都删除，然后在根据roleids重新加入
-     *  删除用户操作：
-     *      删除指定用户在t_user_role表中的相关记录
-     * @param userId    用户id
-     * @param roleIds   角色id
+     * 添加、更新用户操作：
+     * 判断用户对应的角色记录是否存在，先将原来用户所有的角色都删除，然后在根据roleids重新加入
+     * 删除用户操作：
+     * 删除指定用户在t_user_role表中的相关记录
+     *
+     * @param userId  用户id
+     * @param roleIds 角色id
      */
     private String relationUserRole(Integer userId, String roleIds) {
         SqlSession sqlSession = SessionUtils.getSession();
@@ -288,9 +289,9 @@ public class UserService {
         Integer count = userRoleDao.countUserRoleByUserId(userId);
 
         //判断是否有用户角色记录
-        if (count > 0&&userRoleDao.deleteUserRoleByUserId(userId) != count) {
+        if (count > 0 && userRoleDao.deleteUserRoleByUserId(userId) != count) {
             //如果用户角色记录存在，则删除用户对应的角色记录
-                return "用户角色分配失败！";
+            return "用户角色分配失败！";
         }
 
         //判断角色id是否存在，存在则给用户添加相对应的用户角色记录
@@ -310,7 +311,7 @@ public class UserService {
                 userRoleList.add(userRole);
             }
             //批量添加用户角色记录
-            if(userRoleDao.insertBatch(userRoleList) != userRoleList.size()){
+            if (userRoleDao.insertBatch(userRoleList) != userRoleList.size()) {
                 return "用户角色分配失败！";
             }
         }
