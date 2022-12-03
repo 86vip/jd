@@ -80,7 +80,7 @@
                                 <dd>
                                     <a href="javascript:;" class="layui-menu-tips" data-type="tabAdd"
                                        data-tab-mpi="m-p-i-10"
-                                       data-tab="report/2" target="_self"><i class="fa fa-tachometer"></i><span
+                                       data-tab="report/orderState" target="_self"><i class="fa fa-tachometer"></i><span
                                                 class="layui-left-nav"> 实时订单状态</span></a>
                                 </dd>
                             </dl>

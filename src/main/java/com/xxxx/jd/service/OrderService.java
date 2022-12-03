@@ -7,13 +7,10 @@ import com.xxxx.jd.dao.OrderProductDao;
 import com.xxxx.jd.query.OrderQuery;
 import com.xxxx.jd.utils.SessionUtils;
 import com.xxxx.jd.utils.StringUtils;
-import com.xxxx.jd.vo.Customer;
 import com.xxxx.jd.vo.Order;
 import org.apache.ibatis.session.SqlSession;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class OrderService {
 
@@ -102,5 +99,57 @@ public class OrderService {
         sqlSession.close();
 
         return null;
+    }
+
+    public Map<String,Object> queryCustomerConsumeRanking() {
+        SqlSession sqlSession = SessionUtils.getSession();
+        OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
+        List<Map<String, Object>> list = orderDao.queryCustomerConsumeRanking();
+        sqlSession.close();
+        Map<String, Object> map = new HashMap<>();
+        map.put("count",list.size());
+        map.put("data",list);
+        map.put("code",0);
+        map.put("msg","");
+        return map;
+    }
+
+    public Map<String, Object> countOrderState01() {
+        SqlSession sqlSession = SessionUtils.getSession();
+        OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
+        List<Map<String, Object>> dataList = orderDao.countOrderState();
+        List<String> data1 = new ArrayList<>();
+        List<Integer> data2 = new ArrayList<>();
+        if (dataList != null && dataList.size() > 0) {
+            dataList.forEach(data->{
+                data1.add(data.get("state").toString());
+                data2.add(Integer.valueOf(data.get("count").toString()));
+            });
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("data1", data1);
+        map.put("data2", data2);
+        return map;
+    }
+
+    public Map<String,Object> countOrderState02() {
+        SqlSession sqlSession = SessionUtils.getSession();
+        OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
+        List<Map<String, Object>> dataList = orderDao.countOrderState();
+        List<String> data1 = new ArrayList<>();
+        List<Map<String,Object>> data2 = new ArrayList<>();
+        if (dataList != null && dataList.size() > 0) {
+            dataList.forEach(data->{
+                data1.add(data.get("state").toString());
+                Map<String, Object> map = new HashMap<>();
+                map.put("name", data.get("state"));
+                map.put("value", data.get("count"));
+                data2.add(map);
+            });
+        }
+        Map<String, Object> map = new HashMap<>();
+        map.put("data1", data1);
+        map.put("data2", data2);
+        return map;
     }
 }

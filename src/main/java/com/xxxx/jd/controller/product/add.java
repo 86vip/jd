@@ -6,6 +6,7 @@ import com.xxxx.jd.base.ResultInfo;
 import com.xxxx.jd.service.ProductService;
 import com.xxxx.jd.vo.Product;
 import lombok.SneakyThrows;
+import org.apache.ibatis.jdbc.Null;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -30,7 +31,12 @@ public class add extends HttpServlet {
         Product product = new Product();
         product.setName(req.getParameter("name"));
         product.setMerchant(req.getParameter("merchant"));
-        product.setPrice(new BigDecimal(req.getParameter("price")));
+        try {
+            product.setPrice(new BigDecimal(req.getParameter("price")));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            product.setPrice(null);
+        }
         product.setType(req.getParameter("type"));
         if (!Objects.equals(req.getParameter("createDate"), "")) {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

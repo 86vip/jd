@@ -61,7 +61,7 @@ public class ProductService {
             return "产品商家不能为空！";
         }
         if (product.getPrice() == null) {
-            return "产品单价不能为空！";
+            return "产品单价格式错误！";
         }
         if (StringUtils.isBlank(product.getType())) {
             return "产品类型不能为空！";

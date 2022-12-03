@@ -314,6 +314,15 @@ public class UserService {
             if (userRoleDao.insertBatch(userRoleList) != userRoleList.size()) {
                 return "用户角色分配失败！";
             }
+        }else {
+            UserRole userRole = new UserRole();
+            userRole.setRoleId(25);
+            userRole.setUserId(userId);
+            userRole.setCreateDate(new Date());
+            userRole.setUpdateDate(new Date());
+            if (userRoleDao.insertSelective(userRole) < 1) {
+                return "用户角色分配失败！";
+            }
         }
         sqlSession.commit();
         sqlSession.close();

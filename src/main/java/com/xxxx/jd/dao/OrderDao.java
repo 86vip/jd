@@ -24,4 +24,8 @@ public interface OrderDao {
     Map<String, Object> selectById(Integer id);
 
     Integer deleteBatch(String[] ids);
+
+    List<Map<String, Object>> queryCustomerConsumeRanking();
+
+    List<Map<String, Object>> countOrderState();
 }

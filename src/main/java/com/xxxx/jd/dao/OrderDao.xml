@@ -74,6 +74,48 @@
           and tc.is_valid = 1
           and o.id = #{id}
     </select>
+    <select id="queryCustomerConsumeRanking" resultType="java.util.Map">
+        SELECT @rownum := @rownum + 1 as ranking,
+               b.*
+        FROM (SELECT @rownum := 0) r,
+             (SELECT cid id, name, SUM(price) consume
+              from (select o.id    as oid,
+                           tc.id   as cid,
+                           case
+                               WHEN IFNULL(price, 0) = 0 then 0
+                               ELSE price
+                               END as price
+                    from t_order o
+                             left join t_customer tc on tc.id = o.customer_id
+                             left JOIN (
+                        select order_id, sum(price * number) as price
+                        from t_order_product od
+                                 left join t_order t on t.id = od.order_id
+                                 left join t_product tp on od.product_id = tp.id
+                        where od.is_valid = 1
+                          and t.is_valid = 1
+                          and tp.is_valid = 1
+                        GROUP BY order_id) s ON s.order_id = o.id
+                    where o.is_valid = 1
+                      and tc.is_valid = 1) a,
+                   t_customer c,
+                   t_order o
+              WHERE c.id = a.cid
+                and a.oid = o.id
+                and c.is_valid = 1
+                and o.state != 0
+              GROUP BY cid
+              ORDER BY consume DESC) b
+    </select>
+    <select id="countOrderState" resultType="java.util.Map">
+        select
+            case when state=0 then '未付款'
+                 when state=1 then '送货中'
+                 when state=2 then '已完成' end state, count(state) count
+        from t_order
+        where is_valid = 1
+        GROUP BY state
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_order
