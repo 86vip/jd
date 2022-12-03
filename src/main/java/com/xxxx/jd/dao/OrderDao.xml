@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xxxx.jd.dao.OrderDao">
+    <resultMap id="BaseResultMap" type="com.xxxx.jd.vo.Order">
+        <id column="id" jdbcType="INTEGER" property="id"/>
+        <result column="customer_id" jdbcType="INTEGER" property="customerId"/>
+        <result column="address" jdbcType="VARCHAR" property="address"/>
+        <result column="state" jdbcType="INTEGER" property="state"/>
+        <result column="create_date" jdbcType="TIMESTAMP" property="createDate"/>
+        <result column="update_date" jdbcType="TIMESTAMP" property="updateDate"/>
+        <result column="is_valid" jdbcType="INTEGER" property="isValid"/>
+    </resultMap>
+    <sql id="Base_Column_List">
+        id, customer_id, address, `state`, create_date, update_date, is_valid
+    </sql>
+    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+        select
+        <include refid="Base_Column_List"/>
+        from t_order
+        where id = #{id,jdbcType=INTEGER}
+    </select>
+    <!-- 多条件查询Order -->
+    <select id="selectByParams" resultType="java.util.Map">
+        select o.id as id,
+        tc.name,
+        phone,
+        o.address as address,
+        case WHEN IFNULL(price,0)=0 then 0 ELSE price
+        END as price,
+        `state`,
+        o.create_date as createDate,
+        o.update_date as updateDate
+        from t_order o
+        left join t_customer tc on tc.id = o.customer_id
+        left JOIN (
+        select order_id,sum(price*number) as price from t_order_product od
+        left join t_order t on t.id = od.order_id
+        left join t_product tp on od.product_id = tp.id
+        where od.is_valid=1 and t.is_valid=1 and tp.is_valid=1 GROUP BY order_id) s ON s.order_id=o.id
+        WHERE o.is_valid=1 and tc.is_valid=1
+        <if test="id!=null">
+            and o.id=#{id}
+        </if>
+        <if test="customerName!=null and customerName!=''">
+            and name like concat('%',#{customerName},'%')
+        </if>
+        <if test="state!=null">
+            and state=#{state}
+        </if>
+    </select>
+    <!-- 根据id返回需要的订单信息 -->
+    <select id="selectById" resultType="java.util.Map">
+        select o.id      as id,
+               name,
+               phone,
+               o.address as address,
+               case
+                   WHEN IFNULL(price, 0) = 0 then 0
+                   ELSE price
+                   END   as price,
+               `state`
+        from t_order o
+                 left join t_customer tc on tc.id = o.customer_id
+                 left JOIN (
+            select order_id, sum(price * number) as price
+            from t_order_product od
+                     left join t_order t on t.id = od.order_id
+                     left join t_product tp on od.product_id = tp.id
+            where od.is_valid = 1
+              and t.is_valid = 1
+              and tp.is_valid = 1
+            GROUP BY order_id) s ON s.order_id = o.id
+        where o.is_valid = 1
+          and tc.is_valid = 1
+          and o.id = #{id}
+    </select>
+    <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+        delete
+        from t_order
+        where id = #{id,jdbcType=INTEGER}
+    </delete>
+    <update id="deleteBatch">
+        update t_order
+        set is_valid=0
+        where id in
+        <foreach collection="array" item="id" open="(" close=")" separator=",">
+            #{id}
+        </foreach>
+    </update>
+    <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xxxx.jd.vo.Order" useGeneratedKeys="true">
+        insert into t_order (customer_id, address, `state`,
+                             create_date, update_date, is_valid)
+        values (#{customerId,jdbcType=INTEGER}, #{address,jdbcType=VARCHAR}, #{state,jdbcType=INTEGER},
+                #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{isValid,jdbcType=INTEGER})
+    </insert>
+    <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xxxx.jd.vo.Order"
+            useGeneratedKeys="true">
+        insert into t_order
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                customer_id,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="state != null">
+                `state`,
+            </if>
+            <if test="createDate != null">
+                create_date,
+            </if>
+            <if test="updateDate != null">
+                update_date,
+            </if>
+            <if test="isValid != null">
+                is_valid,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="customerId != null">
+                #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isValid != null">
+                #{isValid,jdbcType=INTEGER},
+            </if>
+        </trim>
+    </insert>
+    <update id="updateByPrimaryKeySelective" parameterType="com.xxxx.jd.vo.Order">
+        update t_order
+        <set>
+            <if test="customerId != null">
+                customer_id = #{customerId,jdbcType=INTEGER},
+            </if>
+            <if test="address != null">
+                address = #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="state != null">
+                `state` = #{state,jdbcType=INTEGER},
+            </if>
+            <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="updateDate != null">
+                update_date = #{updateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="isValid != null">
+                is_valid = #{isValid,jdbcType=INTEGER},
+            </if>
+        </set>
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+    <update id="updateByPrimaryKey" parameterType="com.xxxx.jd.vo.Order">
+        update t_order
+        set customer_id = #{customerId,jdbcType=INTEGER},
+            address     = #{address,jdbcType=VARCHAR},
+            `state`     = #{state,jdbcType=INTEGER},
+            create_date = #{createDate,jdbcType=TIMESTAMP},
+            update_date = #{updateDate,jdbcType=TIMESTAMP},
+            is_valid    = #{isValid,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER}
+    </update>
+</mapper>

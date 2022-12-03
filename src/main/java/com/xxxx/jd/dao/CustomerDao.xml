@@ -35,20 +35,25 @@
             and address like concat('%',#{address},'%')
         </if>
     </select>
+    <select id="queryAllCustomers" resultType="java.util.Map">
+        select id, name
+        from t_customer
+        where is_valid =1
+    </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         delete
         from t_customer
         where id = #{id,jdbcType=INTEGER}
     </delete>
     <!-- 批量删除客户 -->
-    <delete id="deleteBatch">
+    <update id="deleteBatch">
         update t_customer
         set is_valid=0
         where id in
         <foreach collection="array" item="id" open="(" close=")" separator=",">
             #{id}
         </foreach>
-    </delete>
+    </update>
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xxxx.jd.vo.Customer" useGeneratedKeys="true">
         insert into t_customer (`name`, phone, address,
                                 is_valid, create_date, update_date)

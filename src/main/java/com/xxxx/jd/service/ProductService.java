@@ -13,6 +13,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ProductService {
@@ -59,8 +60,11 @@ public class ProductService {
         if (StringUtils.isBlank(product.getMerchant())) {
             return "产品商家不能为空！";
         }
+        if (product.getPrice() == null) {
+            return "产品单价不能为空！";
+        }
         if (StringUtils.isBlank(product.getType())) {
-            return "产品商家不能为空！";
+            return "产品类型不能为空！";
         }
         /* 2、设置默认值 */
         if (product.getCreateDate() == null) {
@@ -96,8 +100,11 @@ public class ProductService {
         if (StringUtils.isBlank(product.getMerchant())) {
             return "产品商家不能为空！";
         }
+        if (product.getPrice() == null) {
+            return "产品单价不能为空！";
+        }
         if (StringUtils.isBlank(product.getType())) {
-            return "产品商家不能为空！";
+            return "产品类型不能为空！";
         }
         /* 2、设置默认值 */
         product.setUpdateDate(new Date());
@@ -123,5 +130,13 @@ public class ProductService {
         sqlSession.commit();
         sqlSession.close();
         return null;
+    }
+
+    public List<Map<String, Object>> queryAllProducts() {
+        SqlSession sqlSession = SessionUtils.getSession();
+        ProductDao productDao = sqlSession.getMapper(ProductDao.class);
+        List<Map<String, Object>> list = productDao.queryAllProducts();
+        sqlSession.close();
+        return list;
     }
 }

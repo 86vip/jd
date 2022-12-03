@@ -66,6 +66,26 @@
                                         class="fa fa-street-view"></i><span class="layui-left-nav"> 订单管理</span> </a>
                         </li>
                     </#if>
+                    <#if permissions?seq_contains("60")>
+                        <li class="layui-nav-item">
+                            <a href="javascript:;" class="layui-menu-tips"><i class="fa fa-home"></i><span
+                                        class="layui-left-nav"> 统计报表</span> <span class="layui-nav-more"></span></a>
+                            <dl class="layui-nav-child">
+                                <dd>
+                                    <a href="javascript:;" class="layui-menu-tips" data-type="tabAdd"
+                                       data-tab-mpi="m-p-i-10"
+                                       data-tab="report/ranking" target="_self"><i class="fa fa-tachometer"></i><span
+                                                class="layui-left-nav"> 客户消费排行</span></a>
+                                </dd>
+                                <dd>
+                                    <a href="javascript:;" class="layui-menu-tips" data-type="tabAdd"
+                                       data-tab-mpi="m-p-i-10"
+                                       data-tab="report/2" target="_self"><i class="fa fa-tachometer"></i><span
+                                                class="layui-left-nav"> 实时订单状态</span></a>
+                                </dd>
+                            </dl>
+                        </li>
+                    </#if>
                     <#if permissions?seq_contains("40")>
                         <li class="layui-nav-item">
                             <a href="javascript:;" class="layui-menu-tips" data-tab="user/index"><i

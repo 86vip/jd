@@ -12,6 +12,7 @@ import org.apache.ibatis.session.SqlSession;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class CustomerService {
@@ -104,5 +105,13 @@ public class CustomerService {
         sqlSession.commit();
         sqlSession.close();
         return null;
+    }
+
+    public List<Map<String, Object>> queryAllCustomers() {
+        SqlSession sqlSession = SessionUtils.getSession();
+        CustomerDao customerDao = sqlSession.getMapper(CustomerDao.class);
+        List<Map<String, Object>> list = customerDao.queryAllCustomers();
+        sqlSession.close();
+        return list;
     }
 }

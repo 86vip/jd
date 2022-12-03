@@ -25,6 +25,14 @@
         </div>
     </div>
     <div class="layui-form-item layui-row layui-col-xs12">
+        <label class="layui-form-label">产品单价</label>
+        <div class="layui-input-block">
+            <input type="text" class="layui-input"
+                   lay-verify="required" name="price" id="price" value="${(product.price)!}"
+                   placeholder="请输入产品单价">
+        </div>
+    </div>
+    <div class="layui-form-item layui-row layui-col-xs12">
         <label class="layui-form-label">产品类型</label>
         <div class="layui-input-block">
             <input type="text" class="layui-input"

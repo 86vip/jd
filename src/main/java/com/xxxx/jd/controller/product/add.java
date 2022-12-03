@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class add extends HttpServlet {
         Product product = new Product();
         product.setName(req.getParameter("name"));
         product.setMerchant(req.getParameter("merchant"));
+        product.setPrice(new BigDecimal(req.getParameter("price")));
         product.setType(req.getParameter("type"));
         if (!Objects.equals(req.getParameter("createDate"), "")) {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

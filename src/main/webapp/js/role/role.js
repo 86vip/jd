@@ -116,7 +116,7 @@ layui.use(['table','layer'],function() {
                 //标题
                 title: title,
                 //宽高
-                area: ['600px', '400px'],
+                area: ['300px', '200px'],
                 //url地址
                 content: url,
                 //可以最大化与最小化

@@ -4,6 +4,7 @@ import com.xxxx.jd.query.CustomerQuery;
 import com.xxxx.jd.vo.Customer;
 
 import java.util.List;
+import java.util.Map;
 
 public interface CustomerDao {
     int deleteByPrimaryKey(Integer id);
@@ -21,4 +22,6 @@ public interface CustomerDao {
     List<Customer> selectByParams(CustomerQuery customerQuery);
 
     Integer deleteBatch(String[] ids);
+
+    List<Map<String, Object>> queryAllCustomers();
 }

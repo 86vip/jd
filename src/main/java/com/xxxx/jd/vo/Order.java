@@ -1,48 +1,42 @@
 package com.xxxx.jd.vo;
 
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
 import lombok.Data;
 
 /**
- * t_product
+ * t_order
  * @author 
  */
 @Data
-public class Product implements Serializable {
+public class Order implements Serializable {
     /**
-     * 产品id
+     * 订单号
      */
     private Integer id;
 
     /**
-     * 产品名称
+     * 客户id
      */
-    private String name;
+    private Integer customerId;
 
     /**
-     * 产品商家
+     * 送货地址
      */
-    private String merchant;
+    private String address;
 
     /**
-     * 产品单价
+     * 订单状态
      */
-    private BigDecimal price;
+    private Integer state;
 
     /**
-     * 产品类型
-     */
-    private String type;
-
-    /**
-     * 引进日期
+     * 创建时间
      */
     private Date createDate;
 
     /**
-     * 更新日期
+     * 更新时间
      */
     private Date updateDate;
 
