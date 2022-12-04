@@ -30,7 +30,12 @@ public class update extends HttpServlet {
         product.setId(Integer.valueOf(req.getParameter("id")));
         product.setName(req.getParameter("name"));
         product.setMerchant(req.getParameter("merchant"));
-        product.setPrice(new BigDecimal(req.getParameter("price")));
+        try {
+            product.setPrice(new BigDecimal(req.getParameter("price")));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+            product.setPrice(null);
+        }
         product.setType(req.getParameter("type"));
         if (!Objects.equals(req.getParameter("createDate"), "")) {
             DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

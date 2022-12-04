@@ -16,7 +16,8 @@ layui.use(['layer', 'echarts'], function () {
             let option = {
                 // 标题
                 title: {
-                    text: '实时订单状态'
+                    text: '实时订单状态',
+                    left: 'center'
                 },
                 // 提示框
                 tooltip: {},
@@ -57,10 +58,6 @@ layui.use(['layer', 'echarts'], function () {
 
                 // 指定图表的配置项和数据
                 let option = {
-                    title: {
-                        text: '实时订单状态',
-                        left: 'center'
-                    },
                     tooltip: {
                         trigger: 'item',
                         formatter: '{a} <br/>{b} : {c} ({d}%)'

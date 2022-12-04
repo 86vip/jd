@@ -6,10 +6,12 @@ import com.xxxx.jd.utils.LoginUserUtil;
 import com.xxxx.jd.vo.User;
 
 import javax.servlet.*;
+import javax.servlet.annotation.WebFilter;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.List;
 
+@WebFilter(urlPatterns = {"/*"})
 public class MyFilter implements Filter {
     private UserService userService = new UserService();
     private PermissionService permissionService = new PermissionService();

@@ -28,7 +28,7 @@
         <label class="layui-form-label">产品单价</label>
         <div class="layui-input-block">
             <input type="text" class="layui-input"
-                   lay-verify="required" name="price" id="price" value="${(product.price)!}"
+                   lay-verify="required" name="price" id="price" value="${(product.price?c)!}"
                    placeholder="请输入产品单价">
         </div>
     </div>

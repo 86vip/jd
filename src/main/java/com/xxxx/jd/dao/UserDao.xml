@@ -19,7 +19,7 @@
         select
         <include refid="Base_Column_List"/>
         from t_user
-        where id = #{id,jdbcType=INTEGER}
+        where id = #{id,jdbcType=INTEGER} and is_valid=1
     </select>
     <select id="queryUserByName" resultType="com.xxxx.jd.vo.User" resultMap="BaseResultMap">
         select
