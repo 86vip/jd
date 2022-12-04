@@ -1,4 +1,4 @@
-layui.use(['element', 'layer', 'layuimini','jquery','jquery_cookie'], function () {
+layui.use(['element', 'layer', 'layuimini', 'jquery', 'jquery_cookie'], function () {
     var $ = layui.jquery,
         layer = layui.layer,
         $ = layui.jquery_cookie($);
@@ -17,11 +17,11 @@ layui.use(['element', 'layer', 'layuimini','jquery','jquery_cookie'], function (
             //关闭询问框
             layer.close(index);
             //清空cookie信息
-            $.removeCookie("userIdStr",{domain:"localhost",path:"/jd"});
-            $.removeCookie("userName",{domain:"localhost",path:"/jd"});
-            $.removeCookie("trueName", {domain: "localhost", path: "/jd"});
+            $.removeCookie("userIdStr", {path: "/jd"});
+            $.removeCookie("userName", {path: "/jd"});
+            $.removeCookie("trueName", {path: "/jd"});
             //跳转到登录页面（父窗口跳转）
-            window.parent.location.href=ctx+"/index";
+            window.parent.location.href = ctx + "/index";
         });
     })
 

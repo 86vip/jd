@@ -1,4 +1,4 @@
-layui.use(['form','jquery','jquery_cookie'], function () {
+layui.use(['form', 'jquery', 'jquery_cookie'], function () {
     var form = layui.form,
         layer = layui.layer,
         $ = layui.jquery,
@@ -16,10 +16,10 @@ layui.use(['form','jquery','jquery_cookie'], function () {
             {
                 type: "post",
                 url: ctx + "/user/updatePwd",
-                data:{
-                    oldPwd:data.field.old_password,
-                    newPwd:data.field.new_password,
-                    repeatPwd:data.field.again_password
+                data: {
+                    oldPwd: data.field.old_password,
+                    newPwd: data.field.new_password,
+                    repeatPwd: data.field.again_password
                 },
                 success: function (result) {
                     //判断是否修改成功
@@ -27,15 +27,15 @@ layui.use(['form','jquery','jquery_cookie'], function () {
                         //成功修改密码后，清空cookie数据
                         layer.msg("用户密码修改成功，系统将在3秒后自动退出...", function () {
                             //清空cookie
-                            $.removeCookie("userIdStr",{domain:"localhost",path:"/jd"});
-                            $.removeCookie("userName",{domain:"localhost",path:"/jd"});
-                            $.removeCookie("trueName", {domain: "localhost", path: "/jd"});
+                            $.removeCookie("userIdStr", {path: "/jd"});
+                            $.removeCookie("userName", {path: "/jd"});
+                            $.removeCookie("trueName", {path: "/jd"});
                             setTimeout(function () {
                                 //父窗口跳转到登录页面
                                 window.parent.location.href = ctx + '/index';
                             }, 2000);
                         });
-                    }else{
+                    } else {
                         layer.msg(result.msg, {icon: 5});
                     }
                 }
