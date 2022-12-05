@@ -7,9 +7,11 @@ import com.xxxx.jd.dao.OrderDao;
 import com.xxxx.jd.dao.OrderProductDao;
 import com.xxxx.jd.dao.ProductDao;
 import com.xxxx.jd.utils.SessionUtils;
+import com.xxxx.jd.vo.Order;
 import com.xxxx.jd.vo.OrderProduct;
 import org.apache.ibatis.session.SqlSession;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -37,7 +39,8 @@ public class OrderProductService {
         OrderProductDao orderProductDao = sqlSession.getMapper(OrderProductDao.class);
         OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
         ProductDao productDao = sqlSession.getMapper(ProductDao.class);
-        if (orderProduct.getOrderId() == null || orderDao.selectByPrimaryKey(orderProduct.getOrderId()) == null) {
+        Order order = orderDao.selectByPrimaryKey(orderProduct.getOrderId());
+        if (orderProduct.getOrderId() == null || order == null) {
             return "待添加订单不存在！";
         }
         if (orderProduct.getProductId() == null || productDao.selectByPrimaryKey(orderProduct.getProductId()) == null) {
@@ -48,8 +51,9 @@ public class OrderProductService {
         }
 
         orderProduct.setIsValid(1);
+        order.setUpdateDate(new Date());
 
-        if (orderProductDao.insertSelective(orderProduct) < 1) {
+        if (orderProductDao.insertSelective(orderProduct) < 1||orderDao.updateByPrimaryKeySelective(order)<1) {
             return "添加订单产品失败！";
         }
         sqlSession.commit();
@@ -72,10 +76,11 @@ public class OrderProductService {
         OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
         ProductDao productDao = sqlSession.getMapper(ProductDao.class);
 
+        Order order = orderDao.selectByPrimaryKey(orderProduct.getOrderId());
         if (orderProduct.getId() == null || orderProductDao.selectByPrimaryKey(orderProduct.getId()) == null) {
             return "待修改对象不存在！";
         }
-        if (orderProduct.getOrderId() == null || orderDao.selectByPrimaryKey(orderProduct.getOrderId()) == null) {
+        if (orderProduct.getOrderId() == null || order == null) {
             return "待添加订单不存在！";
         }
         if (orderProduct.getProductId() == null || productDao.selectByPrimaryKey(orderProduct.getProductId()) == null) {
@@ -85,7 +90,9 @@ public class OrderProductService {
             return "产品数量不合法！";
         }
 
-        if (orderProductDao.updateByPrimaryKeySelective(orderProduct) < 1) {
+        order.setUpdateDate(new Date());
+
+        if (orderProductDao.updateByPrimaryKeySelective(orderProduct) < 1||orderDao.updateByPrimaryKeySelective(order)<1) {
             return "修改订单产品失败！";
         }
         sqlSession.commit();
@@ -97,10 +104,16 @@ public class OrderProductService {
     public Object deleteById(Integer id) {
         SqlSession sqlSession = SessionUtils.getSession();
         OrderProductDao orderProductDao = sqlSession.getMapper(OrderProductDao.class);
-        if (id == null || orderProductDao.selectByPrimaryKey(id)==null) {
+        OrderDao orderDao = sqlSession.getMapper(OrderDao.class);
+
+        OrderProduct orderProduct = orderProductDao.selectByPrimaryKey(id);
+        if (id == null || orderProduct==null) {
             return "待删除订单产品不存在！";
         }
-        if (orderProductDao.deleteByPrimaryKey(id)<1) {
+        Order order = orderDao.selectByPrimaryKey(orderProduct.getOrderId());
+        order.setUpdateDate(new Date());
+
+        if (orderProductDao.deleteByPrimaryKey(id)<1||orderDao.updateByPrimaryKeySelective(order)<1) {
             return "删除订单产品失败！";
         }
         sqlSession.commit();
