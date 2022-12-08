@@ -11,7 +11,6 @@ public class StringUtils {
                     return false;
                 }
             }
-
             return true;
         }
     }

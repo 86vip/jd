@@ -1,15 +1,12 @@
 package com.xxxx.jd.utils;
 
-
 import javax.servlet.http.HttpServletRequest;
 
-/**
- * Created by Tony on 2016/8/23.
- */
 public class LoginUserUtil {
 
     /**
      * 从cookie中获取userId
+     *
      * @param request
      * @return
      */

@@ -18,6 +18,7 @@
             <div class="layuimini-tool"><i title="展开" class="fa fa-outdent" data-side-fold="1"></i></div>
         </a>
         <ul class="layui-nav layui-layout-right">
+            <div class="layui-layout-right">&COPY;202041302328邱思腾&nbsp;&nbsp;&nbsp;&nbsp;</div>
             <li class="layui-nav-item mobile layui-hide-xs" lay-unselect>
                 <a href="javascript:;" data-check-screen="full"><i class="fa fa-arrows-alt"></i></a>
             </li>
